@@ -7,6 +7,30 @@
     <groupId>be.blindbadger</groupId>
     <artifactId>jdbc-fondip</artifactId>
     <version>0.0.1-BETA</version>
+
+    <!--
+       Below configuration was added automatically by IntelliJ and will have the same
+       effect as the configuration we already know.
+
+       i.e.
+       <maven.compiler.source>11</maven.compiler.source>
+       <maven.compiler.target>11</maven.compiler.target>
+
+       We will see how this works when we dig a bit deeper into Maven configurations
+    -->
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <configuration>
+                    <source>11</source>
+                    <target>11</target>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+
     <dependencies>
         <!-- https://mvnrepository.com/artifact/mysql/mysql-connector-java -->
         <dependency>
