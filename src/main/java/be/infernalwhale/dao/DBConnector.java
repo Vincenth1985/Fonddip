@@ -9,7 +9,7 @@ import java.sql.SQLException;
 import static be.infernalwhale.config.Config.*;
 
 public class DBConnector {
-    public Connection getConnection() throws SQLException {
+    public static Connection getConnection() throws SQLException {
         return DriverManager.getConnection(
                 DB_URL,
                 DB_USERNAME,

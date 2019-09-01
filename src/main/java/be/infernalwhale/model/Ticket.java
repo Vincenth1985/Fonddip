@@ -45,7 +45,11 @@ public class Ticket {
         foodItemList.remove(item);
     }
 
-    private enum Status {
+    public void setFoodItems(List<FoodItem> list) {
+        this.foodItemList = list;
+    }
+
+    public enum Status {
         ORDERED, PAYED, PROCESSING, READY, FINISHED
     }
 }
