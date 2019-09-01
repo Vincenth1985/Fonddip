@@ -19,4 +19,15 @@
       status VARCHAR(25)
     );
 
-## DBConnector
+##  Classes
+### Config class
+The config class is a central repository for all settings in the application.
+
+### DBConnector
+A factory class for creating and providing Database connections.
+
+### TicketDAO
+The class responsible for all communication with the database regarding tickets.
+
+### FoodItemDAO
+The class responsible for all communication with the database regarding FoodItems.
