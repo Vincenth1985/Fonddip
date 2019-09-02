@@ -53,6 +53,11 @@ public class Ticket {
         return foodItemList;
     }
 
+    @Override
+    public String toString() {
+        return String.format("Ticket{ticketID=%d, foodItemList=%s, totalToPay=%s, status=%s}", ticketID, foodItemList, totalToPay, status);
+    }
+
     public enum Status {
         ORDERED, PAYED, PROCESSING, READY, FINISHED
     }
