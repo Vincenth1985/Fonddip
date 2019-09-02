@@ -3,9 +3,7 @@ package be.infernalwhale.dao;
 import be.infernalwhale.model.FoodItem;
 import be.infernalwhale.model.Ticket;
 
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -23,15 +21,30 @@ public class FoodItemDAO {
 
         ResultSet rs = statement.executeQuery();
 
-
         while (rs.next()) {
 
-            FoodItem foodItem = new FoodItem(new Ticket());
-
-            foodList.add(foodItem.setId(rs.getInt("ticket")));
+            foodList.add(new FoodItem(new Ticket()).setId(rs.getInt("ticket")));
         }
 
-
         return foodList;
-    } 
+    }
+
+
+    public FoodItem createFoodItem(FoodItem foodItem) throws SQLException {
+
+
+        PreparedStatement statement = DBConnector.getConnection()
+                .prepareStatement("INSERT INTO fooditem (id,name,price) VALUES (?,?,?)");
+
+        statement.setInt(1, foodItem.getId());
+        statement.setString(2, foodItem.getName());
+        statement.setDouble(3, foodItem.getPrice());
+
+        statement.executeUpdate();
+
+        return foodItem;
+
+    }
+
+
 }
