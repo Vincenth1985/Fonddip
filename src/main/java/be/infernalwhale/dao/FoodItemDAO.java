@@ -37,7 +37,6 @@ public class FoodItemDAO {
 
     public void createFoodItem(FoodItem foodItem) {
 
-
         try (PreparedStatement statement = DBConnector.getConnection()
                 .prepareStatement("INSERT INTO fooditem (name,price,ticket) VALUES (?,?,?)")) {
 
@@ -54,16 +53,56 @@ public class FoodItemDAO {
 
     }
 
-    public boolean deleteFoodItem(int id) throws SQLException {
-        PreparedStatement statement = DBConnector
-                .getConnection()
-                .prepareStatement("DELETE FROM fooditem WHERE id = ?");
-        statement.setInt(1, id);
-        int count = statement.executeUpdate();
+    public void deleteFoodItem(Integer... integer) throws SQLException {
 
-        if (count > 1) throw new NonUniqueResultException("More than 1 fooditem was removed from the ticket");
-        return count == 1;
+        for (int i = 0; i < integer.length; i++) {
+            PreparedStatement statement = DBConnector
+                    .getConnection()
+                    .prepareStatement("DELETE FROM fooditem WHERE id = ?");
+            statement.setInt(1, integer[ i ]);
+            int count = statement.executeUpdate();
+
+            if (count > 1) throw new NonUniqueResultException("More than 1 fooditem was removed from the ticket");
+
+
+        }
+
+    }
+
+    public void updateFoodItem(FoodItem foodItem, String itemToChange, Object value) {
+
+        try (PreparedStatement statement = DBConnector.getConnection()
+                .prepareStatement("UPDATE fooditem Set " + itemToChange + " = ? WHERE id = ?")) {
+
+            statement.setObject(1, value);
+            statement.setObject(2, foodItem.getId());
+            statement.executeUpdate();
+            System.out.println("update ok");
+
+        } catch (SQLException SQL) {
+            SQL.printStackTrace();
+            System.out.println("Error Updating");
+        }
+
+    }
+
+    public FoodItem getFoodItemWithId(Integer id) throws SQLException {
+        String query = "SELECT * FROM fooditem WHERE id = ?";
+        try (Connection connection = DBConnector.getConnection()) {
+            PreparedStatement preparedStatement = connection.prepareStatement(query);
+            preparedStatement.setInt(1, id);
+            ResultSet rs = preparedStatement.executeQuery();
+            rs.next();
+            return new FoodItem((new TicketDAO()).getTicketByID(rs.getInt("ticket")))
+                    .setName(rs.getString("name"))
+                    .setPrice(rs.getDouble("price"))
+                    .setId(rs.getInt("id"));
+        }
     }
 
 
+
 }
+
+
+

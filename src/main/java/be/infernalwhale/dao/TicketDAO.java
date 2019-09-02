@@ -12,7 +12,6 @@ import java.util.List;
 /**
  * The TicketDAO class will provide CRUD functionality for the
  * Ticket data class.
- *
  */
 public class TicketDAO {
     private FoodItemDAO foodItemDAO = new FoodItemDAO();
@@ -88,8 +87,6 @@ public class TicketDAO {
     }
 
 
-
-
     /**
      * This method will remove a Ticket record.
      *
@@ -97,14 +94,18 @@ public class TicketDAO {
      * @return true if the ticket has been removed. False if the ticket could not be found in the database.
      * @throws SQLException
      */
-    public boolean deleteTicket(int id) throws SQLException {
-        PreparedStatement statement = DBConnector
-                .getConnection()
-                .prepareStatement("DELETE FROM ticket WHERE ticketID = ?");
-        statement.setInt(1, id);
-        int count = statement.executeUpdate();
+    public void
+    deleteTicket(Integer... id) throws SQLException {
+        for (int i = 0; i < id.length; i++) {
 
-        if (count > 1) throw new NonUniqueResultException("More than 1 ticket was removed from the database");
-        return count == 1;
+
+            PreparedStatement statement = DBConnector
+                    .getConnection()
+                    .prepareStatement("DELETE FROM ticket WHERE ticketID = ?");
+            statement.setInt(1, id[i]);
+            int count = statement.executeUpdate();
+
+            if (count > 1) throw new NonUniqueResultException("More than 1 ticket was removed from the database");
+        }
     }
 }

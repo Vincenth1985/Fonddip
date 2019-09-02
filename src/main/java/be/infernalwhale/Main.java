@@ -8,7 +8,7 @@ import be.infernalwhale.model.Ticket;
 import java.sql.SQLException;
 
 public class Main {
-    public static void main(String[] args) {
+    public static void main(String[] args) throws SQLException {
 
 
 
@@ -18,33 +18,38 @@ public class Main {
   en zorg ervoor dat we een ticket kunnen ophalen op basis van de klant.*/
 
 
-       Ticket ticket = new Ticket();
-       ticket.setStatus(Ticket.Status.ORDERED);
+        Ticket ticket = new Ticket();
+        ticket.setStatus(Ticket.Status.ORDERED);
 
 
-       TicketDAO ticketDAO = new TicketDAO();
+        TicketDAO ticketDAO = new TicketDAO();
+        ticketDAO.deleteTicket(8,9,10,11,12,13,14,15,16,17);
 
-        try {
-            ticketDAO.createTicket(ticket);
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
+//        try {
+//            ticketDAO.createTicket(ticket);
+//        } catch (SQLException e) {
+//            e.printStackTrace();
+//        }
 
-        System.out.println(ticket.getTicketID());
 
         FoodItem foodItem = new FoodItem(ticket.setTicketID(1));
         foodItem.setPrice(3.0);
-        foodItem.setName("sauces");
+        foodItem.setName("frikadelle");
 
         FoodItemDAO foodItemDAO = new FoodItemDAO();
         foodItemDAO.createFoodItem(foodItem);
 
-        //Testing deletefoodItem.
+        //    Testing deletefoodItem.
+
         try {
-            foodItemDAO.deleteFoodItem(2);
+            foodItemDAO.deleteFoodItem(4,5,6,7,8,9,11);
         } catch (SQLException e) {
             e.printStackTrace();
         }
+
+
+
+        foodItemDAO.updateFoodItem(foodItemDAO.getFoodItemWithId(10), "name", "boulette");
 
 
     }
