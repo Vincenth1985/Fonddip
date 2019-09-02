@@ -15,7 +15,7 @@ import java.util.List;
  *
  */
 public class TicketDAO {
-    private FoodItemDAO foodItemDAO;
+    private FoodItemDAO foodItemDAO = new FoodItemDAO();
 
     public Ticket getTicketByID(int id) throws SQLException {
         PreparedStatement statement = DBConnector
@@ -86,6 +86,9 @@ public class TicketDAO {
     public boolean updateTicket(Ticket ticket) {
         return false;
     }
+
+
+
 
     /**
      * This method will remove a Ticket record.

@@ -45,6 +45,9 @@ public class Ticket {
         foodItemList.remove(item);
     }
 
+
+
+
     public void setFoodItems(List<FoodItem> list) {
         this.foodItemList = list;
     }

@@ -10,6 +10,8 @@ public class FoodItem {
         this.ticket = ticket;
     }
 
+
+
     public Integer getId() {
         return id;
     }
@@ -35,5 +37,9 @@ public class FoodItem {
     public FoodItem setPrice(Double price) {
         this.price = price;
         return this;
+    }
+
+    public Ticket getTicket() {
+        return ticket;
     }
 }
