@@ -98,21 +98,18 @@ public class TicketDAO {
 
         for (int i = 0; i < id.length; i++) {
 
-            PreparedStatement statement1 = DBConnector
+            PreparedStatement statement = DBConnector
                     .getConnection()
                     .prepareStatement("DELETE FROM fooditem WHERE ticket = ?");
-            statement1.setInt(1, id[ i ]);
-            statement1.executeUpdate();
+            statement.setInt(1, id[ i ]);
+            statement.executeUpdate();
 
-
-            PreparedStatement statement2 = DBConnector
-                    .getConnection()
+            statement = DBConnector.getConnection()
                     .prepareStatement("DELETE FROM ticket WHERE ticketID = ?");
-            statement2.setInt(1, id[ i ]);
 
-            statement2.executeUpdate();
-//
-//            if (count > 1) throw new NonUniqueResultException("More than 1 ticket was removed from the database");
+            statement.setInt(1, id[ i ]);
+            statement.executeUpdate();
+
         }
     }
 }
