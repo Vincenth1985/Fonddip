@@ -42,4 +42,9 @@ public class FoodItem {
     public Ticket getTicket() {
         return ticket;
     }
+
+    @Override
+    public String toString() {
+        return String.format("FoodItem{id=%d, name='%s', price=%s, ticket=%s}", id, name, price, ticket);
+    }
 }

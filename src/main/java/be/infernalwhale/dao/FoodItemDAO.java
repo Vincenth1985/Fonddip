@@ -26,9 +26,9 @@ public class FoodItemDAO {
 
         while (rs.next()) {
 
-            foodList.add(new FoodItem(ticket).setId(rs.getInt("id"))
+            foodList.add(new FoodItem(ticket).setName(rs.getString("name"))
                     .setPrice(rs.getDouble("price"))
-                    .setName("name"));
+                    .setId(rs.getInt("id")));
         }
 
         return foodList;
@@ -97,9 +97,11 @@ public class FoodItemDAO {
                     .setName(rs.getString("name"))
                     .setPrice(rs.getDouble("price"))
                     .setId(rs.getInt("id"));
+        } catch (SQLException SQL) {
+            System.out.println("No Items found in FoodItem");
         }
+        return null;
     }
-
 
 
 }

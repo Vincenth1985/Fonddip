@@ -20,36 +20,29 @@ public class Main {
 
         Ticket ticket = new Ticket();
         ticket.setStatus(Ticket.Status.ORDERED);
-
-
         TicketDAO ticketDAO = new TicketDAO();
-        ticketDAO.deleteTicket(8,9,10,11,12,13,14,15,16,17);
-
-//        try {
-//            ticketDAO.createTicket(ticket);
-//        } catch (SQLException e) {
-//            e.printStackTrace();
-//        }
+        ticketDAO.deleteTicket(1);
 
 
-        FoodItem foodItem = new FoodItem(ticket.setTicketID(1));
-        foodItem.setPrice(3.0);
-        foodItem.setName("frikadelle");
-
+//        FoodItem foodItem = new FoodItem(ticket.setTicketID(1));
+//        foodItem.setPrice(3.0);
+//        foodItem.setName("frikadelle");
+//
         FoodItemDAO foodItemDAO = new FoodItemDAO();
-        foodItemDAO.createFoodItem(foodItem);
+//        foodItemDAO.createFoodItem(foodItem);
 
-        //    Testing deletefoodItem.
 
         try {
-            foodItemDAO.deleteFoodItem(4,5,6,7,8,9,11);
+            foodItemDAO.deleteFoodItem();
         } catch (SQLException e) {
             e.printStackTrace();
         }
 
-
-
-        foodItemDAO.updateFoodItem(foodItemDAO.getFoodItemWithId(10), "name", "boulette");
+//
+//        foodItemDAO.updateFoodItem(foodItemDAO.getFoodItemWithId(23), "name", "boulette");
+//
+//        ticket.setFoodItems(foodItemDAO.getItemsForTicket(1));
+//        ticket.getFoodItemList().forEach(System.out::println);
 
 
     }

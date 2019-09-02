@@ -94,18 +94,25 @@ public class TicketDAO {
      * @return true if the ticket has been removed. False if the ticket could not be found in the database.
      * @throws SQLException
      */
-    public void
-    deleteTicket(Integer... id) throws SQLException {
+    public void deleteTicket(Integer... id) throws SQLException {
+
         for (int i = 0; i < id.length; i++) {
 
+            PreparedStatement statement1 = DBConnector
+                    .getConnection()
+                    .prepareStatement("DELETE FROM fooditem WHERE ticket = ?");
+            statement1.setInt(1, id[ i ]);
+            statement1.executeUpdate();
 
-            PreparedStatement statement = DBConnector
+
+            PreparedStatement statement2 = DBConnector
                     .getConnection()
                     .prepareStatement("DELETE FROM ticket WHERE ticketID = ?");
-            statement.setInt(1, id[i]);
-            int count = statement.executeUpdate();
+            statement2.setInt(1, id[ i ]);
 
-            if (count > 1) throw new NonUniqueResultException("More than 1 ticket was removed from the database");
+            statement2.executeUpdate();
+//
+//            if (count > 1) throw new NonUniqueResultException("More than 1 ticket was removed from the database");
         }
     }
 }
