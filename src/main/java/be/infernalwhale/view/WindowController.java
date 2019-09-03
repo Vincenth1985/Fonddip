@@ -118,6 +118,9 @@ public class WindowController {
     @FXML
     public void printTotalOfOrder() {
 
+        //Reset the totalprise in case of cancel of an Item.
+        totalPrice = 0;
+
         try (PreparedStatement query = DBConnector.getConnection().prepareStatement("SELECT price from foodItem where ticket = ?")) {
             query.setInt(1, ticketId);
             ResultSet rs = query.executeQuery();

@@ -4,18 +4,21 @@ import be.infernalwhale.dao.FoodItemDAO;
 import be.infernalwhale.dao.TicketDAO;
 import be.infernalwhale.model.FoodItem;
 import be.infernalwhale.model.Ticket;
+import be.infernalwhale.view.MainWindow;
 
 import java.sql.SQLException;
 
 public class Main {
 
     public static void main(String[] args) throws SQLException {
-        mainCui();
+      //  mainCui();
         mainGui(args);
     }
 
     public static void mainGui(String[] args) {
 
+        MainWindow mainWindow = new MainWindow();
+        mainWindow.startGui(args);
 
     }
 
