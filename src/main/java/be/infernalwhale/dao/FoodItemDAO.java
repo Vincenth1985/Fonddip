@@ -34,7 +34,6 @@ public class FoodItemDAO {
         return foodList;
     }
 
-
     public void createFoodItem(FoodItem foodItem) {
 
         try (PreparedStatement statement = DBConnector.getConnection()

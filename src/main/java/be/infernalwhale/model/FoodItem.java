@@ -11,7 +11,6 @@ public class FoodItem {
     }
 
 
-
     public Integer getId() {
         return id;
     }
@@ -45,6 +44,6 @@ public class FoodItem {
 
     @Override
     public String toString() {
-        return String.format("FoodItem{id=%d, name='%s', price=%s, ticket=%s}", id, name, price, ticket);
+        return String.format("TicketID %d : FoodItem id = %-4d name = %-20s price = %s € ", ticket.getTicketID(), id, name, price);
     }
 }
