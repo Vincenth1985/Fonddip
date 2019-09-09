@@ -6,23 +6,24 @@ import be.infernalwhale.dao.TicketDAO;
 import be.infernalwhale.model.FoodItem;
 import be.infernalwhale.model.Ticket;
 import javafx.fxml.FXML;
-import javafx.scene.control.TextArea;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 
 public class WindowController {
 
     private FoodItemDAO foodItemDAO = new FoodItemDAO();
     private TicketDAO ticketDAO = new TicketDAO();
-    private List<FoodItem> foodItems = new ArrayList<>();
-    private String statusTicket;
-    private int ticketId;
-    private double totalPrice = 0;
+    private int activeTicket;
 
+
+    @FXML
+    private MenuButton menuButton;
 
     @FXML
     private TextField searchByTicketIdField;
@@ -39,26 +40,77 @@ public class WindowController {
     @FXML
     private TextField priceToAdd;
 
-
     @FXML
-    public List<FoodItem> searchItemsByTicketId() {
+    private TextArea printLogger;
+
+
+    //--------------------------------------------------
+    public void initialize() {
+        updateTicketList();
+    }
+
+    //--------------------------------------------------
+
+    public void updateTicketList() {
 
         try {
-            foodItems = foodItemDAO.getItemsForTicket(Integer.parseInt(searchByTicketIdField.getText()));
+            menuButton.getItems().clear();
+            List<MenuItem> ticketList = ticketDAO.getTickets().stream().filter(e -> !e.getStatus().equals(Ticket.Status.FINISHED))
+                    .map(e -> new MenuItem("Ticket Number " + e.getTicketID() + " : " + e.getStatus()))
+                    .collect(Collectors.toList());
 
+            menuButton.getItems().addAll(ticketList);
 
-            StringBuilder stringBuilder = new StringBuilder();
-            foodItems.forEach(e -> stringBuilder.append(e + "\n"));
+            menuButton.getItems().forEach(e -> e.setOnAction(t -> {
+                menuButton.setText(e.getText());
+                activeTicket = Integer.parseInt(menuButton.getText().substring("Ticket Number".length(), menuButton.getText().indexOf(":")).strip());
+                printSelectedTicketFoodItems();
+            }));
 
-            printDataArea.setText(stringBuilder.toString());
-
+            activeTicket = menuButton.getItems().size() - 1;
+            menuButton.setText(menuButton.getItems().get(activeTicket).getText());
 
         } catch (SQLException e) {
             e.printStackTrace();
         }
 
+    }
 
-        return foodItems;
+    public void printSelectedTicketFoodItems() {
+        searchTicket(activeTicket);
+    }
+
+    private void searchTicket(int id) {
+        try {
+            List<FoodItem> foodItems = ticketDAO.getTicketByID(activeTicket).getFoodItemList();
+            double totalPrice = foodItems.stream().mapToDouble(FoodItem::getPrice).reduce(0, Double::sum);
+
+            StringBuilder stringBuilder = new StringBuilder();
+            foodItems.forEach(e -> stringBuilder.append(e).append("\n"));
+
+            printDataArea.clear();
+            printDataArea.appendText("Ticket NO : " + id + " " + ticketDAO.getTicketByID(id).getStatus() + "\n");
+            printDataArea.appendText("-".repeat(40) + "\n");
+            printDataArea.appendText(stringBuilder.toString());
+            printDataArea.appendText("-".repeat(40) + "\n");
+            printDataArea.appendText(java.lang.String.format("Total To Pay : %.2f  € ", totalPrice));
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @FXML
+    public void searchItemsByTicketId() {
+        try {
+            activeTicket = Integer.parseInt(searchByTicketIdField.getText());
+            Ticket ticket = ticketDAO.getTicketByID(activeTicket);
+
+            searchTicket(activeTicket);
+            menuButton.setText("Ticket Number " + ticket.getTicketID() + " : " + ticket.getStatus());
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 
     @FXML
@@ -66,6 +118,7 @@ public class WindowController {
 
         try {
             foodItemDAO.deleteFoodItem(Integer.parseInt(deleteFoodItem.getText()));
+            printSelectedTicketFoodItems();
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -73,77 +126,40 @@ public class WindowController {
     }
 
     @FXML
-    public int createTicket() {
+    public void createTicket() {
 
         try {
             ticketDAO.createTicket(new Ticket().setStatus(Ticket.Status.ORDERED));
-            Statement statement = DBConnector.getConnection().createStatement();
-            ResultSet rs = statement.executeQuery("SELECT ticketId,status from ticket ORDER BY ticketId DESC limit 1");
-            rs.next();
-            ticketId = rs.getInt("ticketId");
-            statusTicket = rs.getString("status");
-            StringBuilder stringBuilder = new StringBuilder();
-            stringBuilder.append(ticketId);
-            printDataArea.setText("New Ticket Created with number : " + stringBuilder.toString() + "\nStatus : " + statusTicket);
+
+            printLogger.setText("New Ticket Created with number : "
+                    + (Integer.parseInt(menuButton.getItems()
+                    .get(menuButton.getItems().size() - 1).getText()
+                    .substring("Ticket Number".length(), menuButton.getText().indexOf(":"))
+                    .strip()) + 1)
+                    + "\nStatus : ORDERED");
+            printDataArea.setText("");
 
         } catch (SQLException e) {
             e.printStackTrace();
         }
 
-        return ticketId;
+        updateTicketList();
     }
 
     @FXML
     public void addItemToCurrentTicket() {
-        try {
-            if (!(foodToAdd.getText().equals("")) || !(priceToAdd.getText().equals(""))) {
 
-                PreparedStatement query = DBConnector
-                        .getConnection()
-                        .prepareStatement("INSERT INTO fooditem (name,price,ticket) VALUES (?,?,?)");
-                query.setString(1, foodToAdd.getText());
-                query.setFloat(2, Float.parseFloat(priceToAdd.getText()));
-                query.setInt(3, ticketId);
-                query.executeUpdate();
-                printDataArea.setText(foodToAdd.getText() + " Added on ticket : " + ticketId);
+        if (!(foodToAdd.getText().isEmpty()) || !(priceToAdd.getText().isEmpty())) {
 
-            }
+            foodItemDAO.createFoodItem(foodToAdd.getText(), priceToAdd.getText(), activeTicket);
+            printLogger.setText(foodToAdd.getText() + " Added on ticket : " + activeTicket);
+            printSelectedTicketFoodItems();
 
 
-        } catch (SQLException e) {
-            printDataArea.setText("Create New Ticket First");
+        } else {
+            printLogger.setText("Empty Field");
         }
-    }
-
-    @FXML
-    public void printTotalOfOrder() {
-
-        //Reset the totalprise in case of cancel of an Item.
-        totalPrice = 0;
-
-        try (PreparedStatement query = DBConnector.getConnection().prepareStatement("SELECT price from foodItem where ticket = ?")) {
-            query.setInt(1, ticketId);
-            ResultSet rs = query.executeQuery();
-            foodItems = foodItemDAO.getItemsForTicket(ticketId);
-            while (rs.next()) {
-                totalPrice += rs.getFloat("price");
-            }
-
-        } catch (SQLException sql) {
-            sql.printStackTrace();
-        }
-
-
-        StringBuilder stringBuilder = new StringBuilder();
-        foodItems.forEach(e -> stringBuilder.append(e + "\n"));
-
-        printDataArea.clear();
-        printDataArea.appendText("Ticket NO : " + ticketId + " " + statusTicket + "\n");
-        printDataArea.appendText("-".repeat(40) + "\n");
-        printDataArea.appendText(stringBuilder.toString());
-        printDataArea.appendText("-".repeat(40) + "\n");
-        printDataArea.appendText(String.format("Total To Pay : %.3f  € ", totalPrice));
-
-
     }
 }
+
+

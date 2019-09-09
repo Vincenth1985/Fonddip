@@ -8,9 +8,22 @@ public class Ticket {
     private List<FoodItem> foodItemList;
     private Double totalToPay;
     private Status status;
+    private java.lang.String customerName;
 
     public Integer getTicketID() {
         return ticketID;
+    }
+
+    public java.lang.String getCustomerName() {
+        return customerName;
+    }
+
+    public void setFoodItemList(List<FoodItem> foodItemList) {
+        this.foodItemList = foodItemList;
+    }
+
+    public void setCustomerName(java.lang.String customerName) {
+        this.customerName = customerName;
     }
 
     public Ticket setTicketID(Integer ticketID) {
@@ -54,8 +67,8 @@ public class Ticket {
     }
 
     @Override
-    public String toString() {
-        return String.format("Ticket{ticketID=%d, foodItemList=%s, totalToPay=%s, status=%s}", ticketID, foodItemList, totalToPay, status);
+    public java.lang.String toString() {
+        return java.lang.String.format("Ticket{ticketID=%d, foodItemList=%s, totalToPay=%s, status=%s}", ticketID, foodItemList, totalToPay, status);
     }
 
     public enum Status {

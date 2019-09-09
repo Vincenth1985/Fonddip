@@ -2,7 +2,7 @@ package be.infernalwhale.model;
 
 public class FoodItem {
     private Integer id;
-    private String name;
+    private java.lang.String name;
     private Double price;
     private Ticket ticket;
 
@@ -20,11 +20,11 @@ public class FoodItem {
         return this;
     }
 
-    public String getName() {
+    public java.lang.String getName() {
         return name;
     }
 
-    public FoodItem setName(String name) {
+    public FoodItem setName(java.lang.String name) {
         this.name = name;
         return this;
     }
@@ -43,7 +43,7 @@ public class FoodItem {
     }
 
     @Override
-    public String toString() {
-        return String.format("TicketID %d : FoodItem id = %-4d name = %-20s price = %s € ", ticket.getTicketID(), id, name, price);
+    public java.lang.String toString() {
+        return java.lang.String.format("TicketID %d : FoodItem id = %-4d name = %-20s price = %s € ", ticket.getTicketID(), id, name, price);
     }
 }

@@ -67,7 +67,7 @@ public class TicketDAO {
         statement.setString(1, ticket.getStatus().toString());
         statement.executeUpdate();
 
-        String findNewID = "SELECT MAX(ticketID) AS newID FROM ticket";
+        java.lang.String findNewID = "SELECT MAX(ticketID) AS newID FROM ticket";
         Statement findNewStatement = DBConnector.getConnection().createStatement();
         ResultSet rs = findNewStatement.executeQuery(findNewID);
 

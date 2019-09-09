@@ -34,14 +34,14 @@ public class FoodItemDAO {
         return foodList;
     }
 
-    public void createFoodItem(FoodItem foodItem) {
+    public void createFoodItem(String name, String price, int ticketId) {
 
         try (PreparedStatement statement = DBConnector.getConnection()
                 .prepareStatement("INSERT INTO fooditem (name,price,ticket) VALUES (?,?,?)")) {
 
-            statement.setString(1, foodItem.getName());
-            statement.setDouble(2, foodItem.getPrice());
-            statement.setInt(3, foodItem.getTicket().getTicketID());
+            statement.setString(1, name);
+            statement.setDouble(2, Double.parseDouble(price));
+            statement.setInt(3, ticketId);
 
             statement.executeUpdate();
 
@@ -68,7 +68,7 @@ public class FoodItemDAO {
 
     }
 
-    public void updateFoodItem(FoodItem foodItem, String itemToChange, Object value) {
+    public void updateFoodItem(FoodItem foodItem, java.lang.String itemToChange, Object value) {
 
         try (PreparedStatement statement = DBConnector.getConnection()
                 .prepareStatement("UPDATE fooditem Set " + itemToChange + " = ? WHERE id = ?")) {
@@ -86,7 +86,7 @@ public class FoodItemDAO {
     }
 
     public FoodItem getFoodItemWithId(Integer id) throws SQLException {
-        String query = "SELECT * FROM fooditem WHERE id = ?";
+        java.lang.String query = "SELECT * FROM fooditem WHERE id = ?";
         try (Connection connection = DBConnector.getConnection()) {
             PreparedStatement preparedStatement = connection.prepareStatement(query);
             preparedStatement.setInt(1, id);
