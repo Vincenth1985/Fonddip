@@ -6,6 +6,7 @@
 <?import javafx.scene.control.TextArea?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Text?>
 
 <AnchorPane fx:id="mainWindow" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="be.infernalwhale.view.WindowController">
    <children>
@@ -19,13 +20,15 @@
             <TextField fx:id="deleteFoodItem" layoutX="33.0" layoutY="525.0" prefHeight="28.0" prefWidth="168.0" promptText="Food Id" />
             <Label layoutX="34.0" layoutY="505.0" prefHeight="17.0" prefWidth="162.0" text="Food Id to Delete" />
             <Button layoutX="31.0" layoutY="50.0" mnemonicParsing="false" onAction="#createTicket" prefHeight="84.0" prefWidth="195.0" text="1. Create Ticket" />
-            <Label layoutX="31.0" layoutY="152.0" prefHeight="17.0" prefWidth="195.0" text="Food                            Price" />
-            <TextField fx:id="foodToAdd" layoutX="34.0" layoutY="186.0" prefHeight="27.0" prefWidth="125.0" promptText="food" />
+            <Label layoutX="33.0" layoutY="169.0" prefHeight="17.0" prefWidth="195.0" text="Food                             Price" />
+            <TextField fx:id="foodToAdd" layoutX="32.0" layoutY="186.0" prefHeight="27.0" prefWidth="125.0" promptText="food" />
             <TextField fx:id="priceToAdd" layoutX="165.0" layoutY="186.0" prefHeight="27.0" prefWidth="62.0" promptText="price" />
             <Button layoutX="32.0" layoutY="222.0" mnemonicParsing="false" onAction="#addItemToCurrentTicket" prefHeight="78.0" prefWidth="193.0" text="2. Add Food" />
             <Label layoutX="372.0" layoutY="361.0" prefHeight="17.0" prefWidth="162.0" />
             <MenuButton fx:id="menuButton" layoutX="352.0" layoutY="365.0" mnemonicParsing="false" prefHeight="27.0" prefWidth="443.0" />
             <TextArea fx:id="printLogger" layoutX="356.0" layoutY="425.0" prefHeight="146.0" prefWidth="276.0" />
+            <MenuButton fx:id="statusMenu" layoutX="32.0" layoutY="334.0" mnemonicParsing="false" prefHeight="27.0" prefWidth="195.0" />
+            <Text layoutX="33.0" layoutY="330.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Status" wrappingWidth="90.21875" />
          </children>
       </AnchorPane>
    </children>

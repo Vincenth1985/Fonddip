@@ -82,8 +82,19 @@ public class TicketDAO {
         return getTicketByID(newID);
     }
 
-    public boolean updateTicket(Ticket ticket) {
-        return false;
+    public void updateTicket(int id, Ticket.Status status) {
+
+        try {
+            PreparedStatement preparedStatement = DBConnector.getConnection()
+                    .prepareStatement("UPDATE ticket SET status = ? where ticketID = ?");
+            preparedStatement.setObject(1, status.toString());
+            preparedStatement.setInt(2, id);
+            preparedStatement.executeUpdate();
+            preparedStatement.close();
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 
 

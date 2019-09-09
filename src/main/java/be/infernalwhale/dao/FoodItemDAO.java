@@ -34,7 +34,7 @@ public class FoodItemDAO {
         return foodList;
     }
 
-    public void createFoodItem(String name, String price, int ticketId) {
+    public void createFoodItem(String name,String price,int ticketId) {
 
         try (PreparedStatement statement = DBConnector.getConnection()
                 .prepareStatement("INSERT INTO fooditem (name,price,ticket) VALUES (?,?,?)")) {

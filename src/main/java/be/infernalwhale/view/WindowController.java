@@ -5,6 +5,8 @@ import be.infernalwhale.dao.FoodItemDAO;
 import be.infernalwhale.dao.TicketDAO;
 import be.infernalwhale.model.FoodItem;
 import be.infernalwhale.model.Ticket;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 
@@ -43,11 +45,17 @@ public class WindowController {
     @FXML
     private TextArea printLogger;
 
+    @FXML
+    private MenuButton statusMenu;
+
 
     //--------------------------------------------------
     public void initialize() {
         updateTicketList();
+        setStatusToTicket();
+
     }
+
 
     //--------------------------------------------------
 
@@ -62,6 +70,7 @@ public class WindowController {
             menuButton.getItems().addAll(ticketList);
 
             menuButton.getItems().forEach(e -> e.setOnAction(t -> {
+                //Pour chaque élément de la liste d'items ????
                 menuButton.setText(e.getText());
                 activeTicket = Integer.parseInt(menuButton.getText().substring("Ticket Number".length(), menuButton.getText().indexOf(":")).strip());
                 printSelectedTicketFoodItems();
@@ -79,6 +88,41 @@ public class WindowController {
     public void printSelectedTicketFoodItems() {
         searchTicket(activeTicket);
     }
+
+    public void setStatusToTicket()  {
+
+        statusMenu.getItems().add(new MenuItem(Ticket.Status.FINISHED.toString()));
+        statusMenu.getItems().add(new MenuItem(Ticket.Status.ORDERED.toString()));
+        statusMenu.getItems().add(new MenuItem(Ticket.Status.PROCESSING.toString()));
+        statusMenu.getItems().add(new MenuItem(Ticket.Status.PAYED.toString()));
+        statusMenu.getItems().add(new MenuItem(Ticket.Status.READY.toString()));
+
+        statusMenu.getItems().get(0).setOnAction(t -> {
+            ticketDAO.updateTicket(activeTicket, Ticket.Status.FINISHED);
+            updateTicketList();
+        });
+        statusMenu.getItems().get(1).setOnAction(t -> {
+            ticketDAO.updateTicket(activeTicket, Ticket.Status.ORDERED);
+            updateTicketList();
+        });
+        statusMenu.getItems().get(2).setOnAction(t -> {
+            ticketDAO.updateTicket(activeTicket, Ticket.Status.PROCESSING);
+            updateTicketList();
+        });
+        statusMenu.getItems().get(3).setOnAction(t -> {
+            ticketDAO.updateTicket(activeTicket, Ticket.Status.PAYED);
+            updateTicketList();
+        });
+        statusMenu.getItems().get(4).setOnAction(t -> {
+            ticketDAO.updateTicket(activeTicket, Ticket.Status.READY);
+            updateTicketList();
+        });
+
+        statusMenu.setText(statusMenu.getItems().get(1).getText());
+
+
+    }
+
 
     private void searchTicket(int id) {
         try {
@@ -160,6 +204,8 @@ public class WindowController {
             printLogger.setText("Empty Field");
         }
     }
+
+
 }
 
 
