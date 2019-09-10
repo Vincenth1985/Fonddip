@@ -97,7 +97,7 @@ public class FoodItemDAO {
                     .setId(rs.getInt("id"));
     }
 
- 
+
 }
 
 

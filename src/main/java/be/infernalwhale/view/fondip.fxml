@@ -19,18 +19,18 @@
                </font>
 
             </TextArea>
-            <Label layoutX="34.0" layoutY="397.0" prefHeight="17.0" prefWidth="162.0" text="Search by Ticket Id" />
-            <Button layoutX="33.0" layoutY="444.0" mnemonicParsing="false" onAction="#searchItemsByTicketId" prefHeight="27.0" prefWidth="167.0" text="Search" />
-            <TextField fx:id="searchByTicketIdField" layoutX="32.0" layoutY="414.0" prefHeight="27.0" prefWidth="169.0" promptText="Ticket Id" />
-            <Button layoutX="34.0" layoutY="556.0" mnemonicParsing="false" onAction="#deleteFoodItem" prefHeight="27.0" prefWidth="167.0" text="Delete" />
-            <TextField fx:id="deleteFoodItem" layoutX="33.0" layoutY="525.0" prefHeight="28.0" prefWidth="168.0" promptText="Food Id" />
-            <Label layoutX="34.0" layoutY="505.0" prefHeight="17.0" prefWidth="162.0" text="Food Id to Delete" />
-            <Button layoutX="31.0" layoutY="50.0" mnemonicParsing="false" onAction="#createTicket" prefHeight="84.0" prefWidth="195.0" text="1. Create Ticket" />
-            <Label layoutX="33.0" layoutY="169.0" prefHeight="17.0" prefWidth="195.0" text="Food                             Price" />
-            <TextField fx:id="foodToAdd" layoutX="32.0" layoutY="186.0" prefHeight="27.0" prefWidth="125.0" promptText="food" />
-            <TextField fx:id="priceToAdd" layoutX="165.0" layoutY="186.0" prefHeight="27.0" prefWidth="62.0" promptText="price" />
+            <Label layoutX="619.0" layoutY="514.0" prefHeight="17.0" prefWidth="162.0" text="Search by Ticket Id" />
+            <Button layoutX="618.0" layoutY="561.0" mnemonicParsing="false" onAction="#searchItemsByTicketId" prefHeight="27.0" prefWidth="167.0" text="Search" />
+            <TextField fx:id="searchByTicketIdField" layoutX="617.0" layoutY="531.0" prefHeight="27.0" prefWidth="169.0" promptText="Ticket Id" />
+            <Button layoutX="446.0" layoutY="560.0" mnemonicParsing="false" onAction="#deleteFoodItem" prefHeight="27.0" prefWidth="167.0" text="Delete" />
+            <TextField fx:id="deleteFoodItem" layoutX="445.0" layoutY="530.0" prefHeight="27.0" prefWidth="168.0" promptText="Food Id" />
+            <Label layoutX="446.0" layoutY="514.0" prefHeight="17.0" prefWidth="162.0" text="Food Id to Delete" />
+            <Button layoutX="31.0" layoutY="85.0" mnemonicParsing="false" onAction="#createTicket" prefHeight="84.0" prefWidth="195.0" text="1. Create Ticket" />
+            <Label layoutX="33.0" layoutY="198.0" prefHeight="17.0" prefWidth="195.0" text="Food                             Price" />
+            <TextField fx:id="foodToAdd" layoutX="32.0" layoutY="215.0" prefHeight="27.0" prefWidth="125.0" promptText="food" />
+            <TextField fx:id="priceToAdd" layoutX="165.0" layoutY="215.0" prefHeight="27.0" prefWidth="62.0" promptText="price" />
 
-            <Button layoutX="32.0" layoutY="222.0" mnemonicParsing="false" onAction="#addItemToCurrentTicket" prefHeight="78.0" prefWidth="193.0" text="2. Add Food" />
+            <Button layoutX="32.0" layoutY="251.0" mnemonicParsing="false" onAction="#addItemToCurrentTicket" prefHeight="78.0" prefWidth="193.0" text="2. Add Food" />
             <Label layoutX="372.0" layoutY="361.0" prefHeight="17.0" prefWidth="162.0" />
             <MenuButton fx:id="menuButton" layoutX="243.0" layoutY="365.0" mnemonicParsing="false" prefHeight="27.0" prefWidth="552.0" />
             <TextArea fx:id="printLogger" layoutX="243.0" layoutY="406.0" prefHeight="84.0" prefWidth="552.0" style="-fx-text-fill: red;">
@@ -38,8 +38,9 @@
                   <Font name="Courier" size="12.0" />
                </font>
             </TextArea>
-            <MenuButton fx:id="statusMenu" layoutX="32.0" layoutY="334.0" mnemonicParsing="false" prefHeight="27.0" prefWidth="195.0" />
-            <Text layoutX="33.0" layoutY="330.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Status" wrappingWidth="90.21875" />
+            <MenuButton fx:id="statusMenu" layoutX="32.0" layoutY="363.0" mnemonicParsing="false" prefHeight="27.0" prefWidth="195.0" />
+            <Text layoutX="33.0" layoutY="359.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Status" wrappingWidth="90.21875" />
+            <TextField fx:id="customerName" layoutX="31.0" layoutY="53.0" prefHeight="27.0" prefWidth="195.0" promptText="Customer Name" />
          </children>
       </AnchorPane>
    </children>

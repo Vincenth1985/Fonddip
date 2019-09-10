@@ -9,11 +9,9 @@ import be.infernalwhale.services.MenuItemGenerator;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
-import javafx.scene.text.Text;
 
 import java.sql.*;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -39,6 +37,9 @@ public class WindowController {
 
     @FXML
     private MenuButton menuButton;
+
+    @FXML
+    private TextField customerName;
 
     @FXML
     private TextField searchByTicketIdField;
@@ -122,7 +123,7 @@ public class WindowController {
         statusMenu.setText(statusMenu.getItems().get(1).getText());
     }
 
-    private void searchTicket(int id) {
+    public void searchTicket(int id) {
         try {
             List<FoodItem> foodItems = ticketDAO.getTicketByID(activeTicket).getFoodItemList();
             double totalPrice = foodItems.stream().mapToDouble(FoodItem::getPrice).reduce(0, Double::sum);
@@ -187,23 +188,27 @@ public class WindowController {
     @FXML
     public void createTicket() {
 
-        try {
+        if (!customerName.getText().isEmpty()) {
+            try {
 
-            ticketDAO.createTicket(new Ticket().setStatus(Ticket.Status.ORDERED));
+                ticketDAO.createTicket(new Ticket().setStatus(Ticket.Status.ORDERED), customerName.getText());
 
-            printLogger.setText("New Ticket Created with number : "
-                    + (Integer.parseInt(menuButton.getItems()
-                    .get(menuButton.getItems().size() - 1).getText()
-                    .substring("Ticket Number".length(), menuButton.getText().indexOf(":"))
-                    .strip()) + 1)
-                    + "\nStatus : ORDERED");
+                printLogger.setText("New Ticket Created with number : "
+                        + (Integer.parseInt(menuButton.getItems()
+                        .get(menuButton.getItems().size() - 1).getText()
+                        .substring("Ticket Number".length(), menuButton.getText().indexOf(":"))
+                        .strip()) + 1)
+                        + "\nStatus : ORDERED");
 
-        } catch (SQLException e) {
-            e.printStackTrace();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+            updateTicketList();
+            selectLastTicketMade();
+            printSelectedTicketFoodItems();
+        } else {
+            printLogger.setText("Please introduce a customer name first ");
         }
-        updateTicketList();
-        selectLastTicketMade();
-        printSelectedTicketFoodItems();
 
 
     }

@@ -63,11 +63,12 @@ public class TicketDAO {
         return result;
     }
 
-    public Ticket createTicket(Ticket ticket) throws SQLException {
+    public Ticket createTicket(Ticket ticket, String customerName) throws SQLException {
         PreparedStatement statement = DBConnector
                 .getConnection()
-                .prepareStatement("INSERT INTO ticket (status) VALUES (?)");
+                .prepareStatement("INSERT INTO ticket (status,Customer) VALUES (?,?)");
         statement.setString(1, ticket.getStatus().toString());
+        statement.setString(2, customerName);
         statement.executeUpdate();
 
         java.lang.String findNewID = "SELECT MAX(ticketID) AS newID FROM ticket";
