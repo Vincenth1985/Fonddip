@@ -1,17 +1,19 @@
 package be.infernalwhale.view;
 
-import be.infernalwhale.dao.DBConnector;
 import be.infernalwhale.dao.FoodItemDAO;
 import be.infernalwhale.dao.TicketDAO;
 import be.infernalwhale.model.FoodItem;
 import be.infernalwhale.model.Ticket;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
+
+import be.infernalwhale.services.MenuItemGenerator;
+
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
+import javafx.scene.text.Text;
 
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -19,8 +21,19 @@ import java.util.stream.Stream;
 
 public class WindowController {
 
-    private FoodItemDAO foodItemDAO = new FoodItemDAO();
-    private TicketDAO ticketDAO = new TicketDAO();
+    private FoodItemDAO foodItemDAO;
+    private TicketDAO ticketDAO;
+
+
+    {
+        try {
+            foodItemDAO = new FoodItemDAO();
+            ticketDAO = new TicketDAO();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
     private int activeTicket;
 
 
@@ -53,7 +66,6 @@ public class WindowController {
     public void initialize() {
         updateTicketList();
         setStatusToTicket();
-
     }
 
 
@@ -70,14 +82,15 @@ public class WindowController {
             menuButton.getItems().addAll(ticketList);
 
             menuButton.getItems().forEach(e -> e.setOnAction(t -> {
-                //Pour chaque élément de la liste d'items ????
                 menuButton.setText(e.getText());
                 activeTicket = Integer.parseInt(menuButton.getText().substring("Ticket Number".length(), menuButton.getText().indexOf(":")).strip());
                 printSelectedTicketFoodItems();
             }));
 
-            activeTicket = menuButton.getItems().size() - 1;
-            menuButton.setText(menuButton.getItems().get(activeTicket).getText());
+            if (activeTicket == 0)
+                selectLastTicketMade();
+
+            printSelectedTicketFoodItems();
 
         } catch (SQLException e) {
             e.printStackTrace();
@@ -85,44 +98,29 @@ public class WindowController {
 
     }
 
+    public void selectLastTicketMade() {
+        MenuItem menuItem = menuButton.getItems().get(menuButton.getItems().size() - 1);
+        activeTicket = Integer.parseInt(menuItem.getText().substring("Ticket Number".length(), menuItem.getText().indexOf(":")).strip());
+        menuButton.setText(menuItem.getText());
+    }
+
     public void printSelectedTicketFoodItems() {
         searchTicket(activeTicket);
     }
 
-    public void setStatusToTicket()  {
+    public void setStatusToTicket() {
 
-        statusMenu.getItems().add(new MenuItem(Ticket.Status.FINISHED.toString()));
-        statusMenu.getItems().add(new MenuItem(Ticket.Status.ORDERED.toString()));
-        statusMenu.getItems().add(new MenuItem(Ticket.Status.PROCESSING.toString()));
-        statusMenu.getItems().add(new MenuItem(Ticket.Status.PAYED.toString()));
-        statusMenu.getItems().add(new MenuItem(Ticket.Status.READY.toString()));
-
-        statusMenu.getItems().get(0).setOnAction(t -> {
-            ticketDAO.updateTicket(activeTicket, Ticket.Status.FINISHED);
-            updateTicketList();
-        });
-        statusMenu.getItems().get(1).setOnAction(t -> {
-            ticketDAO.updateTicket(activeTicket, Ticket.Status.ORDERED);
-            updateTicketList();
-        });
-        statusMenu.getItems().get(2).setOnAction(t -> {
-            ticketDAO.updateTicket(activeTicket, Ticket.Status.PROCESSING);
-            updateTicketList();
-        });
-        statusMenu.getItems().get(3).setOnAction(t -> {
-            ticketDAO.updateTicket(activeTicket, Ticket.Status.PAYED);
-            updateTicketList();
-        });
-        statusMenu.getItems().get(4).setOnAction(t -> {
-            ticketDAO.updateTicket(activeTicket, Ticket.Status.READY);
-            updateTicketList();
-        });
+        Ticket.Status[] statuses = new Ticket.Status[]{Ticket.Status.FINISHED, Ticket.Status.ORDERED, Ticket.Status.PAYED, Ticket.Status.PROCESSING, Ticket.Status.READY};
+        for (Ticket.Status status : statuses) {
+            statusMenu.getItems().add(MenuItemGenerator.generationMenuItem(status, e -> {
+                ticketDAO.updateTicket(activeTicket, status);
+                updateTicketList();
+                statusMenu.setText(status.toString());
+            }));
+        }
 
         statusMenu.setText(statusMenu.getItems().get(1).getText());
-
-
     }
-
 
     private void searchTicket(int id) {
         try {
@@ -144,8 +142,9 @@ public class WindowController {
         }
     }
 
+
     @FXML
-    public void searchItemsByTicketId() {
+    public void searchItemsByTicketId() throws InterruptedException {
         try {
             activeTicket = Integer.parseInt(searchByTicketIdField.getText());
             Ticket ticket = ticketDAO.getTicketByID(activeTicket);
@@ -154,14 +153,30 @@ public class WindowController {
             menuButton.setText("Ticket Number " + ticket.getTicketID() + " : " + ticket.getStatus());
         } catch (SQLException e) {
             e.printStackTrace();
+        } catch (NumberFormatException nfe) {
+            printLogger.setText("Please introduce a valid number");
         }
     }
 
     @FXML
     public void deleteFoodItem() {
+//        List<Integer> integerlist = new ArrayList<>();
+//
+//        String[] input = deleteFoodItem.getText().split(",");
+//        for (String s : input) {
+//            integerlist.add(Integer.parseInt(s));
+//        }
+//
+//        Integer[] integers = new Integer[ input.length ];
+//        for (int i = 0; i < integers.length; i++) {
+//            integers[ i ] = Integer.parseInt(input[ i ]);
+//        }
 
         try {
-            foodItemDAO.deleteFoodItem(Integer.parseInt(deleteFoodItem.getText()));
+            List<Integer> faischierputaindemerde = new ArrayList<>();
+            Stream.of(deleteFoodItem.getText().split(",")).map(String::strip).mapToInt(Integer::parseInt).forEach(faischierputaindemerde::add);
+            foodItemDAO.deleteFoodItem(faischierputaindemerde);
+            printLogger.setText("Food item deleted");
             printSelectedTicketFoodItems();
         } catch (SQLException e) {
             e.printStackTrace();
@@ -173,6 +188,7 @@ public class WindowController {
     public void createTicket() {
 
         try {
+
             ticketDAO.createTicket(new Ticket().setStatus(Ticket.Status.ORDERED));
 
             printLogger.setText("New Ticket Created with number : "
@@ -181,13 +197,15 @@ public class WindowController {
                     .substring("Ticket Number".length(), menuButton.getText().indexOf(":"))
                     .strip()) + 1)
                     + "\nStatus : ORDERED");
-            printDataArea.setText("");
 
         } catch (SQLException e) {
             e.printStackTrace();
         }
-
         updateTicketList();
+        selectLastTicketMade();
+        printSelectedTicketFoodItems();
+
+
     }
 
     @FXML

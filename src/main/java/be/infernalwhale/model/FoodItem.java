@@ -44,6 +44,6 @@ public class FoodItem {
 
     @Override
     public java.lang.String toString() {
-        return java.lang.String.format("TicketID %d : FoodItem id = %-4d name = %-20s price = %s € ", ticket.getTicketID(), id, name, price);
+        return java.lang.String.format("TicketID %d : FoodItem id = %-2d name = %-10s price = %-2s € ", ticket.getTicketID(), id, name, price);
     }
 }

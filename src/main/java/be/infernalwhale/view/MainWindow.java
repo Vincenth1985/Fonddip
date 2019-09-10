@@ -16,11 +16,11 @@ public class MainWindow extends Application {
 
     @Override
     public void start(Stage stage) throws Exception {
-
         File file = Paths.get("src/main/java/be/infernalwhale/view/fondip.fxml").toFile();
         Parent parent = FXMLLoader.load(file.toURI().toURL());
 
         stage.setTitle("Tutoriel Java FX");
+
         stage.setScene(new Scene(parent, 800, 600));
         stage.setResizable(false);
         stage.show();

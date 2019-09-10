@@ -16,6 +16,9 @@ import java.util.List;
 public class TicketDAO {
     private FoodItemDAO foodItemDAO = new FoodItemDAO();
 
+    public TicketDAO() throws SQLException {
+    }
+
     public Ticket getTicketByID(int id) throws SQLException {
         PreparedStatement statement = DBConnector
                 .getConnection()

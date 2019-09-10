@@ -8,16 +8,20 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class FoodItemDAO {
+    private final Connection connection;
+
+    public FoodItemDAO() throws SQLException {
+            connection = DBConnector.getConnection();
+    }
 
 
     public List<FoodItem> getItemsForTicket(int ticketID) throws SQLException {
 
         List<FoodItem> foodList = new ArrayList<>();
 
-        PreparedStatement statement = DBConnector
-                .getConnection()
-                .prepareStatement("SELECT * FROM foodItem WHERE ticket = ?");
+        PreparedStatement statement = connection.prepareStatement("SELECT * FROM foodItem WHERE ticket = ?");
         statement.setInt(1, ticketID);
+
 
         ResultSet rs = statement.executeQuery();
 
@@ -36,8 +40,7 @@ public class FoodItemDAO {
 
     public void createFoodItem(String name,String price,int ticketId) {
 
-        try (PreparedStatement statement = DBConnector.getConnection()
-                .prepareStatement("INSERT INTO fooditem (name,price,ticket) VALUES (?,?,?)")) {
+        try (PreparedStatement statement = connection.prepareStatement("INSERT INTO fooditem (name,price,ticket) VALUES (?,?,?)")) {
 
             statement.setString(1, name);
             statement.setDouble(2, Double.parseDouble(price));
@@ -52,13 +55,11 @@ public class FoodItemDAO {
 
     }
 
-    public void deleteFoodItem(Integer... integer) throws SQLException {
+    public void deleteFoodItem(List<Integer> integer) throws SQLException {
 
-        for (int i = 0; i < integer.length; i++) {
-            PreparedStatement statement = DBConnector
-                    .getConnection()
-                    .prepareStatement("DELETE FROM fooditem WHERE id = ?");
-            statement.setInt(1, integer[ i ]);
+        for (int i = 0; i < integer.size(); i++) {
+            PreparedStatement statement = connection.prepareStatement("DELETE FROM fooditem WHERE id = ?");
+            statement.setInt(1, integer.get(i));
             int count = statement.executeUpdate();
 
             if (count > 1) throw new NonUniqueResultException("More than 1 fooditem was removed from the ticket");
@@ -70,8 +71,7 @@ public class FoodItemDAO {
 
     public void updateFoodItem(FoodItem foodItem, java.lang.String itemToChange, Object value) {
 
-        try (PreparedStatement statement = DBConnector.getConnection()
-                .prepareStatement("UPDATE fooditem Set " + itemToChange + " = ? WHERE id = ?")) {
+        try (PreparedStatement statement = connection.prepareStatement("UPDATE fooditem Set " + itemToChange + " = ? WHERE id = ?")) {
 
             statement.setObject(1, value);
             statement.setObject(2, foodItem.getId());
@@ -87,7 +87,6 @@ public class FoodItemDAO {
 
     public FoodItem getFoodItemWithId(Integer id) throws SQLException {
         java.lang.String query = "SELECT * FROM fooditem WHERE id = ?";
-        try (Connection connection = DBConnector.getConnection()) {
             PreparedStatement preparedStatement = connection.prepareStatement(query);
             preparedStatement.setInt(1, id);
             ResultSet rs = preparedStatement.executeQuery();
@@ -96,13 +95,9 @@ public class FoodItemDAO {
                     .setName(rs.getString("name"))
                     .setPrice(rs.getDouble("price"))
                     .setId(rs.getInt("id"));
-        } catch (SQLException SQL) {
-            System.out.println("No Items found in FoodItem");
-        }
-        return null;
     }
 
-
+ 
 }
 
 
